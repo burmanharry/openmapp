@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.openmapp/openmapp",
+  "title": "OpenMapp",
+  "description": "Find US BJJ gyms with weekly schedules, open mats, and visitor drop-in prices.",
+  "version": "0.1.0",
+  "websiteUrl": "https://www.openmapp.com/mcp",
+  "icons": [
+    {
+      "src": "https://www.openmapp.com/brand/om-mark.png",
+      "mimeType": "image/png",
+      "theme": "light"
+    },
+    {
+      "src": "https://www.openmapp.com/brand/om-mark-dark.png",
+      "mimeType": "image/png",
+      "theme": "dark"
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://www.openmapp.com/mcp"
+    }
+  ]
+}

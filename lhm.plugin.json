@@ -1,0 +1,151 @@
+{
+  "cloudEndpoint": "https://www.openmapp.com/mcp",
+  "description": "Find US BJJ gyms, drop-ins, and class times.",
+  "homepage": "https://www.openmapp.com",
+  "icon": "https://www.openmapp.com/brand/om-mark.png",
+  "identifier": "openmapp",
+  "name": "OpenMapp",
+  "prompts": [],
+  "resources": [],
+  "tools": [
+    {
+      "name": "find_gyms",
+      "title": "Find BJJ gyms",
+      "description": "Find BJJ gyms near a US city, neighborhood, or ZIP. Defaults match the OpenMapp map: open to drop-ins, classes today. Returns drop-in policy, visitor fee when known, and matching class times.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string",
+            "minLength": 2,
+            "description": "City, neighborhood, address, or ZIP, same as the OpenMapp search box"
+          },
+          "drop_ins": {
+            "description": "Only gyms marked Drop-ins (known welcome or a listed visitor/open-mat price). Default true",
+            "type": "boolean"
+          },
+          "today": {
+            "description": "Only gyms with a listed class or open mat today. Default true",
+            "type": "boolean"
+          },
+          "kinds": {
+            "description": "Filter to Gi, No-Gi, and/or open mat",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "gi",
+                "nogi",
+                "openmat"
+              ]
+            }
+          },
+          "day": {
+            "description": "Restrict to this weekday or tomorrow. Overrides today",
+            "type": "string",
+            "enum": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri",
+              "Sat",
+              "Sun",
+              "tomorrow"
+            ]
+          },
+          "limit": {
+            "description": "Max gyms to return. Default 8",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 25
+          }
+        },
+        "required": [
+          "q"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "get_gym",
+      "title": "Get gym details",
+      "description": "Full public gym card: address, drop-in policy, visitor fee, and the weekly timetable. Use an id or slug from find_gyms.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Gym id or slug from find_gyms, e.g. 10th-planet-allentown"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "list_cities",
+      "title": "List covered cities",
+      "description": "US cities OpenMapp covers, with gym counts, how many welcome class drop-ins, and how many list an open mat. Use this to check coverage before find_gyms. Filter by city name or two-letter state.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "description": "Filter by city name, e.g. Austin",
+            "type": "string"
+          },
+          "state": {
+            "description": "Two-letter US state, e.g. TX",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Max cities to return. Default all matching, max 500",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 500
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "map_url",
+      "title": "OpenMapp map link",
+      "description": "OpenMapp map link for a city search, optionally with a gym drawer already open.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string",
+            "minLength": 1,
+            "description": "City or search text for the map search box"
+          },
+          "gym_id": {
+            "description": "Gym id from find_gyms to open the details drawer",
+            "type": "string"
+          }
+        },
+        "required": [
+          "q"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    }
+  ],
+  "version": "0.1.0"
+}
