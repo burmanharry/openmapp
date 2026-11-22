@@ -1,4 +1,6 @@
 {
+  "author": "burmanharry",
+  "authorUrl": "https://github.com/burmanharry",
   "cloudEndpoint": "https://www.openmapp.com/mcp",
   "description": "Find US BJJ gyms, drop-ins, and class times.",
   "homepage": "https://www.openmapp.com",
@@ -11,7 +13,7 @@
     {
       "name": "find_gyms",
       "title": "Find BJJ gyms",
-      "description": "Find BJJ gyms near a US city, neighborhood, or ZIP. Defaults match the OpenMapp map: open to drop-ins, classes today. Returns drop-in policy, visitor fee when known, and matching class times.",
+      "description": "Find BJJ gyms near a US city, neighborhood, or ZIP. Defaults: open to drop-ins, classes today. Returns drop-in policy, visitor fee when known, matching class times, and online booking (reservePrice, reserveUrl) when the gym takes reservations.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -66,6 +68,10 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
+      "annotations": {
+        "title": "Find BJJ gyms",
+        "readOnlyHint": true
+      },
       "execution": {
         "taskSupport": "forbidden"
       }
@@ -73,7 +79,7 @@
     {
       "name": "get_gym",
       "title": "Get gym details",
-      "description": "Full public gym card: address, drop-in policy, visitor fee, and the weekly timetable. Use an id or slug from find_gyms.",
+      "description": "Full public gym card: address, drop-in policy, visitor fee, the weekly timetable, and online booking when the gym takes reservations (price and reserveUrl per class). Use an id or slug from find_gyms.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -87,6 +93,65 @@
           "id"
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Get gym details",
+        "readOnlyHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "start_reservation",
+      "title": "Start a drop-in reservation",
+      "description": "Check that a class at a gym can be reserved online right now and get the link where the visitor signs the gym's waiver and pays (or reserves free). Returns the class's next date and start time, price, cancellation policy, and reserveUrl. It does not book anything: the visitor must open reserveUrl and sign and pay themselves. When status is unavailable, reason says why and reservableClasses lists classes that can be reserved instead.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Gym id or slug from find_gyms or get_gym"
+          },
+          "day": {
+            "type": "string",
+            "enum": [
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri",
+              "Sat",
+              "Sun"
+            ],
+            "description": "Weekday of the class, as listed in sessions"
+          },
+          "time": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Class start time as listed in sessions, e.g. \"6:30 PM\""
+          },
+          "name": {
+            "description": "Class name from sessions. Needed only when the gym lists two classes at the same day and time",
+            "type": "string"
+          },
+          "date": {
+            "description": "YYYY-MM-DD within the next 7 days, on the class's weekday. Default: the next time the class runs",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          }
+        },
+        "required": [
+          "id",
+          "day",
+          "time"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "Start a drop-in reservation",
+        "readOnlyHint": true
       },
       "execution": {
         "taskSupport": "forbidden"
@@ -116,6 +181,10 @@
         },
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
+      "annotations": {
+        "title": "List covered cities",
+        "readOnlyHint": true
+      },
       "execution": {
         "taskSupport": "forbidden"
       }
@@ -141,6 +210,10 @@
           "q"
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "title": "OpenMapp map link",
+        "readOnlyHint": true
       },
       "execution": {
         "taskSupport": "forbidden"
