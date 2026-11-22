@@ -21,5 +21,4 @@ This repo is the public listing package (manifest only). The site lives at [open
 ## Listings
 
 - [Official MCP Registry](https://registry.modelcontextprotocol.io/?search=openmapp)
-- [Smithery](https://smithery.ai/servers/burmanharry/openmapp)
 - [Glama](https://glama.ai/mcp/connectors/com.openmapp/openmapp)
